@@ -1,24 +1,14 @@
-/**
- * @(#) LicencePlongeur.java
- */
 package ffssm;
 
 import java.time.LocalDate;
-
 import lombok.Getter;
 import lombok.Setter;
 
 public class Licence {
-    @Getter @Setter
-    public Plongeur possesseur;
-
+    @Getter @Setter public Plongeur possesseur;
     public String numero;
-
-    @Getter @Setter
-    public LocalDate delivrance;
-
-    @Getter @Setter
-    public Club club;
+    @Getter @Setter public LocalDate delivrance;
+    @Getter @Setter public Club club;
 
     public Licence(Plongeur possesseur, String numero, LocalDate delivrance, Club club) {
         this.possesseur = possesseur;
@@ -27,15 +17,17 @@ public class Licence {
         this.club = club;
     }
 
-    /**
-     * Est-ce que la licence est valide à la date indiquée ?
-     * Une licence est valide pendant un an à compter de sa date de délivrance
-     * @param d la date à tester
-     * @return vrai si valide à la date d
-     **/
+    /** Une licence est valide pendant un an à compter de sa délivrance (inclus). */
     public boolean estValide(LocalDate d) {
-         // TODO: Implémenter cette méthode
-        throw new UnsupportedOperationException("Pas encore implémenté");
+        if (d == null || delivrance == null) return false;
+        LocalDate fin = delivrance.plusYears(1);
+        // valide si d est dans l'intervalle [delivrance, delivrance.plusYears(1)]
+        return (!d.isBefore(delivrance)) && (!d.isAfter(fin));
     }
 
+    @Override
+    public String toString() {
+        return String.format("Licence[%s - %s - %s]", numero, delivrance, possesseur != null ? possesseur.getNom() : "null");
+    }
 }
+
